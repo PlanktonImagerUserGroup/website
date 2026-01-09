@@ -1,38 +1,60 @@
-/* Enable smooth scrolling */
-html {
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
   scroll-behavior: smooth;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  line-height: 1.6;
-}
-
-/* Navigation */
+/* Navigation stays fixed */
 nav {
-  position: sticky;
+  position: fixed;
   top: 0;
-  background: #fff;
+  width: 100%;
   padding: 1rem;
-  border-bottom: 1px solid #eee;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  gap: 1rem;
+  z-index: 1000;
 }
 
-nav a {
-  margin-right: 1rem;
-  text-decoration: none;
-  color: #0070f3;
-  font-weight: bold;
+/* Scroll snap container */
+.snap-container {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
 }
 
-/* Sections */
-section {
-  padding: 4rem 1.5rem;
-  max-width: 800px;
-  margin: auto;
+/* Each section fills the screen */
+.snap-section {
+  height: 100vh;
+  scroll-snap-align: start;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 4rem 2rem;
 }
 
+/* Just for visual separation */
 .hero {
-  text-align: center;
-  padding-top: 5rem;
+  background: #f5f7fa;
+}
+
+#about {
+  background: #e9ecef;
+}
+
+#events {
+  background: #dee2e6;
+}
+
+#join {
+  background: #ced4da;
 }
