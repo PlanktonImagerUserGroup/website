@@ -8,6 +8,7 @@
 </head>
 <body>
 
+  <!-- Fixed Navigation -->
   <nav>
     <a href="#hero">Home</a>
     <a href="#about">About</a>
@@ -15,8 +16,10 @@
     <a href="#join">Join</a>
   </nav>
 
+  <!-- Scrollable container -->
   <main class="snap-container">
 
+    <!-- Hero Section -->
     <section id="hero" class="snap-section hero">
       <div class="hero-content">
         <h1>Plankton Imager User Group</h1>
@@ -27,16 +30,32 @@
       </div>
     </section>
 
+    <!-- About Section -->
     <section id="about" class="snap-section">
       <h2>About the Group</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>
+        The plankton imager is a flow‑through camera system that continuously photographs plankton in seawater pumped from a research vessel. 
+        It captures thousands of colour images per minute, covering organisms from roughly 0.2 mm to several centimetres. Typical sampling rates 
+        are about 34 litres of water per minute, generating tens of gigabytes of image data each day. This allows near real‑time monitoring of 
+        plankton communities at sea without manual sample collection. Data can be processed automatically to classify plankton and provide 
+        rapid summaries for ecological assessments.
+      </p>
+      <p>
+        The Plankton Imager User Group (Pi‑10) is a collaborative community focused on advancing automated plankton imaging. It brings together 
+        users to share knowledge, develop best practices, and harmonise workflows for data processing and analysis. The group works on improving 
+        machine learning tools, standardising protocols, and supporting integration of imaging outputs into monitoring frameworks. Regular 
+        discussions and shared resources help members troubleshoot challenges and innovate collectively. Its aim is to ensure consistent, 
+        high-quality use of Pi‑10 technology across diverse applications.
+      </p>
     </section>
 
+    <!-- Events Section -->
     <section id="events" class="snap-section">
       <h2>Events</h2>
       <p>Monthly meetups, guest speakers, hands-on sessions.</p>
     </section>
 
+    <!-- Join Section -->
     <section id="join" class="snap-section">
       <h2>Join</h2>
       <p>Find us online and get involved.</p>
@@ -47,6 +66,7 @@
 
   </main>
 
+  <!-- Scroll snapping JS -->
   <script>
     const container = document.querySelector('.snap-container');
     const sections = Array.from(document.querySelectorAll('.snap-section'));
@@ -56,49 +76,21 @@
     container.addEventListener('scroll', () => {
       clearTimeout(scrollStopTimer);
       scrollStopTimer = setTimeout(() => {
-        snapToNearestSection();
-      }, 150);
+        // Snap to nearest section only when scrolling stops
+        const scrollTop = container.scrollTop;
+        let closest = sections[0];
+        let minDistance = Math.abs(scrollTop - closest.offsetTop);
+        sections.forEach(section => {
+          const distance = Math.abs(scrollTop - section.offsetTop);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closest = section;
+          }
+        });
+
+        container.scrollTo({ top: closest.offsetTop, behavior: 'smooth' });
+      }, 200); // 200ms after scroll stop
     });
-
-    function snapToNearestSection() {
-      const scrollTop = container.scrollTop;
-
-      let closest = sections[0];
-      let minDistance = Math.abs(scrollTop - closest.offsetTop);
-
-      sections.forEach(section => {
-        const distance = Math.abs(scrollTop - section.offsetTop);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closest = section;
-        }
-      });
-
-      smoothScrollTo(closest.offsetTop, 700);
-    }
-
-    function smoothScrollTo(target, duration) {
-      const start = container.scrollTop;
-      const distance = target - start;
-      const startTime = performance.now();
-
-      function animate(time) {
-        const elapsed = time - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        const eased = progress < 0.5
-          ? 2 * progress * progress
-          : -1 + (4 - 2 * progress) * progress;
-
-        container.scrollTop = start + distance * eased;
-
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        }
-      }
-
-      requestAnimationFrame(animate);
-    }
   </script>
 
 </body>
