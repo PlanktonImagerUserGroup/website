@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Example User Group</title>
+  <title>Plankton Imager User Group</title>
   <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -25,7 +26,6 @@
         <img src="bannerimage.png" alt="Plankton Imager Banner" class="hero-banner">
       </div>
     </section>
-
 
     <section id="about" class="snap-section">
       <h2>About the Group</h2>
@@ -74,7 +74,7 @@
         }
       });
 
-      smoothScrollTo(closest.offsetTop, 700); // slower 700ms duration
+      smoothScrollTo(closest.offsetTop, 700);
     }
 
     function smoothScrollTo(target, duration) {
@@ -86,7 +86,6 @@
         const elapsed = time - startTime;
         const progress = Math.min(elapsed / duration, 1);
 
-        // easeInOutQuad for smooth slower scroll
         const eased = progress < 0.5
           ? 2 * progress * progress
           : -1 + (4 - 2 * progress) * progress;
@@ -103,3 +102,4 @@
   </script>
 
 </body>
+</html>
