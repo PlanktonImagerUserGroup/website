@@ -16,11 +16,9 @@
     <a href="#join">Join</a>
   </nav>
 
-  <!-- Scrollable container -->
-  <main class="snap-container">
-
-    <!-- Hero Section -->
-    <section id="hero" class="snap-section hero">
+  <!-- Sections -->
+  <main class="sections">
+    <section id="hero" class="section hero">
       <div class="hero-content">
         <h1>Plankton Imager User Group</h1>
         <p class="subtitle">
@@ -30,8 +28,7 @@
       </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="snap-section">
+    <section id="about" class="section">
       <h2>About the Group</h2>
       <p>
         The plankton imager is a flow‑through camera system that continuously photographs plankton in seawater pumped from a research vessel. 
@@ -49,47 +46,52 @@
       </p>
     </section>
 
-    <!-- Events Section -->
-    <section id="events" class="snap-section">
+    <section id="events" class="section">
       <h2>Events</h2>
       <p>Monthly meetups, guest speakers, hands-on sessions.</p>
     </section>
 
-    <!-- Join Section -->
-    <section id="join" class="snap-section">
+    <section id="join" class="section">
       <h2>Join</h2>
       <p>Find us online and get involved.</p>
       <p>
         <a href="#">GitHub</a> | <a href="#">Meetup</a>
       </p>
     </section>
-
   </main>
 
-  <!-- Scroll snapping JS -->
+  <!-- Scroll JS -->
   <script>
-    const container = document.querySelector('.snap-container');
-    const sections = Array.from(document.querySelectorAll('.snap-section'));
+    const sections = Array.from(document.querySelectorAll('.section'));
+    let currentSection = 0;
+    let isScrolling = false;
 
-    let scrollStopTimer;
+    function scrollToSection(index) {
+      if (index < 0) index = 0;
+      if (index >= sections.length) index = sections.length - 1;
+      isScrolling = true;
+      sections[index].scrollIntoView({ behavior: 'smooth' });
+      currentSection = index;
+      setTimeout(() => { isScrolling = false; }, 800); // wait for scroll animation
+    }
 
-    container.addEventListener('scroll', () => {
-      clearTimeout(scrollStopTimer);
-      scrollStopTimer = setTimeout(() => {
-        // Snap to nearest section only when scrolling stops
-        const scrollTop = container.scrollTop;
-        let closest = sections[0];
-        let minDistance = Math.abs(scrollTop - closest.offsetTop);
-        sections.forEach(section => {
-          const distance = Math.abs(scrollTop - section.offsetTop);
-          if (distance < minDistance) {
-            minDistance = distance;
-            closest = section;
-          }
-        });
+    window.addEventListener('wheel', (e) => {
+      if (isScrolling) return;
+      if (e.deltaY > 0) {
+        scrollToSection(currentSection + 1);
+      } else {
+        scrollToSection(currentSection - 1);
+      }
+    });
 
-        container.scrollTo({ top: closest.offsetTop, behavior: 'smooth' });
-      }, 200); // 200ms after scroll stop
+    // Optional: keyboard support
+    window.addEventListener('keydown', (e) => {
+      if (isScrolling) return;
+      if (e.key === "ArrowDown" || e.key === "PageDown") {
+        scrollToSection(currentSection + 1);
+      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+        scrollToSection(currentSection - 1);
+      }
     });
   </script>
 
