@@ -25,7 +25,7 @@ nav {
 /* Scroll container */
 .snap-container {
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   /* Disable native snapping */
   scroll-snap-type: none;
@@ -33,7 +33,7 @@ nav {
   /* Account for fixed nav */
   scroll-padding-top: 80px;
 
-  /* Better momentum */
+  /* Native momentum */
   -webkit-overflow-scrolling: touch;
 }
 
