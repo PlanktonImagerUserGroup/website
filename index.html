@@ -41,5 +41,36 @@
 
   </main>
 
+  <!-- Smooth snap + bounce -->
+  <script>
+    const container = document.querySelector('.snap-container');
+    let snapTimeout;
+
+    container.addEventListener('scroll', () => {
+      clearTimeout(snapTimeout);
+
+      snapTimeout = setTimeout(() => {
+        const sections = document.querySelectorAll('.snap-section');
+        const scrollTop = container.scrollTop;
+
+        let closestSection = sections[0];
+        let closestDistance = Math.abs(scrollTop - sections[0].offsetTop);
+
+        sections.forEach(section => {
+          const distance = Math.abs(scrollTop - section.offsetTop);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestSection = section;
+          }
+        });
+
+        container.scrollTo({
+          top: closestSection.offsetTop,
+          behavior: 'smooth'
+        });
+      }, 90);
+    });
+  </script>
+
 </body>
 </html>
