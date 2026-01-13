@@ -45,14 +45,13 @@
     const container = document.querySelector('.snap-container');
     const sections = Array.from(document.querySelectorAll('.snap-section'));
 
-    let scrollTimeout;
+    let scrollStopTimer;
 
     container.addEventListener('scroll', () => {
-      clearTimeout(scrollTimeout);
-
-      scrollTimeout = setTimeout(() => {
+      clearTimeout(scrollStopTimer);
+      scrollStopTimer = setTimeout(() => {
         snapToNearestSection();
-      }, 150); // wait 150ms after last scroll event
+      }, 150);
     });
 
     function snapToNearestSection() {
@@ -69,12 +68,32 @@
         }
       });
 
-      container.scrollTo({
-        top: closest.offsetTop,
-        behavior: 'smooth'
-      });
+      smoothScrollTo(closest.offsetTop, 700); // slower 700ms duration
+    }
+
+    function smoothScrollTo(target, duration) {
+      const start = container.scrollTop;
+      const distance = target - start;
+      const startTime = performance.now();
+
+      function animate(time) {
+        const elapsed = time - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // easeInOutQuad for smooth slower scroll
+        const eased = progress < 0.5
+          ? 2 * progress * progress
+          : -1 + (4 - 2 * progress) * progress;
+
+        container.scrollTop = start + distance * eased;
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      }
+
+      requestAnimationFrame(animate);
     }
   </script>
 
 </body>
-</html>
