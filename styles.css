@@ -26,14 +26,8 @@ nav {
 .snap-container {
   height: 100vh;
   overflow-y: auto;
-
-  /* disable CSS snap */
   scroll-snap-type: none;
-
-  /* fixed nav offset */
   scroll-padding-top: 80px;
-
-  /* smooth momentum on touch devices */
   -webkit-overflow-scrolling: touch;
 }
 
