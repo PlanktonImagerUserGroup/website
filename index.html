@@ -45,44 +45,34 @@
     const container = document.querySelector('.snap-container');
     const sections = Array.from(document.querySelectorAll('.snap-section'));
 
-    let scrollStopTimer = null;
-    let isSnapping = false;
+    let scrollTimeout;
 
     container.addEventListener('scroll', () => {
-      if (isSnapping) return;
+      clearTimeout(scrollTimeout);
 
-      clearTimeout(scrollStopTimer);
-
-      scrollStopTimer = setTimeout(() => {
+      scrollTimeout = setTimeout(() => {
         snapToNearestSection();
-      }, 140); // how long after scroll stops
+      }, 150); // wait 150ms after last scroll event
     });
 
     function snapToNearestSection() {
       const scrollTop = container.scrollTop;
 
-      let closestSection = sections[0];
-      let closestDistance = Math.abs(scrollTop - closestSection.offsetTop);
+      let closest = sections[0];
+      let minDistance = Math.abs(scrollTop - closest.offsetTop);
 
       sections.forEach(section => {
         const distance = Math.abs(scrollTop - section.offsetTop);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestSection = section;
+        if (distance < minDistance) {
+          minDistance = distance;
+          closest = section;
         }
       });
 
-      isSnapping = true;
-
       container.scrollTo({
-        top: closestSection.offsetTop,
+        top: closest.offsetTop,
         behavior: 'smooth'
       });
-
-      // release lock after animation
-      setTimeout(() => {
-        isSnapping = false;
-      }, 600);
     }
   </script>
 
