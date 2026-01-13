@@ -56,27 +56,32 @@ nav {
   text-align: center;
 }
 
+/* Huge title */
 .hero h1 {
-  font-size: 5rem;       /* much bigger title */
+  font-size: 5rem;
   font-weight: 700;
   line-height: 1.1;
 }
 
+/* Large subtitle */
 .hero .subtitle {
-  font-size: 2rem;       /* larger subtitle */
+  font-size: 2rem;
   color: #555;
   max-width: 900px;
 }
 
+/* Banner image */
 .hero-banner {
-  width: auto;           /* native width */
-  height: auto;          /* native height */
-  max-width: 100%;       /* scale down for mobile */
   display: block;
-  margin-top: 2rem;      /* spacing below subtitle */
+  max-width: 100%;   /* scale down on small screens */
+  width: auto;       /* keep native width */
+  height: auto;      /* keep native height */
+  object-fit: contain; /* ensures image maintains aspect ratio */
+  margin-top: 2rem;  /* spacing below subtitle */
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
+
 
 /* Other sections */
 #about { background: #e9ecef; }
