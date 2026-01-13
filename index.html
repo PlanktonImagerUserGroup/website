@@ -45,26 +45,68 @@
     const container = document.querySelector('.snap-container');
     const sections = Array.from(document.querySelectorAll('.snap-section'));
 
-    let scrollTimeout;
+    let currentScroll = 0;
+    let targetScroll = 0;
+    let isSnapping = false;
+    let snapTimeout;
 
+    currentScroll = targetScroll = container.scrollTop;
+
+    /* Smooth wheel scrolling */
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+
+      targetScroll += e.deltaY * 0.8;
+      targetScroll = Math.max(
+        0,
+        Math.min(
+          targetScroll,
+          container.scrollHeight - container.clientHeight
+        )
+      );
+
+      startSmoothScroll();
+
+      clearTimeout(snapTimeout);
+      snapTimeout = setTimeout(() => snapToSection(), 150);
+    }, { passive: false });
+
+    /* Scrollbar drag sync */
     container.addEventListener('scroll', () => {
-      clearTimeout(scrollTimeout);
-
-      scrollTimeout = setTimeout(() => {
-        snapToClosestSection();
-      }, 120);
+      if (!isSnapping) {
+        currentScroll = targetScroll = container.scrollTop;
+      }
     });
 
-    function snapToClosestSection() {
+    function startSmoothScroll() {
+      if (isSnapping) return;
+
+      isSnapping = true;
+
+      function animate() {
+        currentScroll += (targetScroll - currentScroll) * 0.12;
+        container.scrollTop = currentScroll;
+
+        if (Math.abs(targetScroll - currentScroll) > 0.5) {
+          requestAnimationFrame(animate);
+        } else {
+          isSnapping = false;
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function snapToSection() {
       const scrollTop = container.scrollTop;
 
       let closest = sections[0];
-      let closestDistance = Math.abs(scrollTop - closest.offsetTop);
+      let minDistance = Math.abs(scrollTop - closest.offsetTop);
 
       sections.forEach(section => {
         const distance = Math.abs(scrollTop - section.offsetTop);
-        if (distance < closestDistance) {
-          closestDistance = distance;
+        if (distance < minDistance) {
+          minDistance = distance;
           closest = section;
         }
       });
@@ -75,7 +117,7 @@
     function bounceScrollTo(target) {
       const start = container.scrollTop;
       const distance = target - start;
-      const duration = 750;
+      const duration = 800;
 
       let startTime = null;
 
@@ -85,10 +127,9 @@
 
       function animate(time) {
         if (!startTime) startTime = time;
-        const elapsed = time - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
+        const progress = Math.min((time - startTime) / duration, 1);
         const eased = easeOutElastic(progress);
+
         container.scrollTop = start + distance * eased;
 
         if (progress < 1) {
