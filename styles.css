@@ -27,45 +27,32 @@ nav {
   height: 100vh;
   overflow-y: auto;
 
-  /* Disable native snapping */
+  /* disable CSS snap */
   scroll-snap-type: none;
 
-  /* Account for fixed nav */
+  /* fixed nav offset */
   scroll-padding-top: 80px;
 
-  /* Native momentum */
+  /* smooth momentum on touch devices */
   -webkit-overflow-scrolling: touch;
 }
 
 /* Sections */
 .snap-section {
   height: 100vh;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   padding: 4rem 2rem;
   text-align: center;
 }
 
 /* Visual separation */
-.hero {
-  background: #f5f7fa;
-}
-
-#about {
-  background: #e9ecef;
-}
-
-#events {
-  background: #dee2e6;
-}
-
-#join {
-  background: #ced4da;
-}
+.hero { background: #f5f7fa; }
+#about { background: #e9ecef; }
+#events { background: #dee2e6; }
+#join { background: #ced4da; }
 
 /* Links */
 a {
