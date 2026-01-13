@@ -41,35 +41,63 @@
 
   </main>
 
-  <!-- Smooth snap + bounce -->
   <script>
     const container = document.querySelector('.snap-container');
-    let snapTimeout;
+    const sections = Array.from(document.querySelectorAll('.snap-section'));
+
+    let scrollTimeout;
 
     container.addEventListener('scroll', () => {
-      clearTimeout(snapTimeout);
+      clearTimeout(scrollTimeout);
 
-      snapTimeout = setTimeout(() => {
-        const sections = document.querySelectorAll('.snap-section');
-        const scrollTop = container.scrollTop;
-
-        let closestSection = sections[0];
-        let closestDistance = Math.abs(scrollTop - sections[0].offsetTop);
-
-        sections.forEach(section => {
-          const distance = Math.abs(scrollTop - section.offsetTop);
-          if (distance < closestDistance) {
-            closestDistance = distance;
-            closestSection = section;
-          }
-        });
-
-        container.scrollTo({
-          top: closestSection.offsetTop,
-          behavior: 'smooth'
-        });
-      }, 90);
+      scrollTimeout = setTimeout(() => {
+        snapToClosestSection();
+      }, 120);
     });
+
+    function snapToClosestSection() {
+      const scrollTop = container.scrollTop;
+
+      let closest = sections[0];
+      let closestDistance = Math.abs(scrollTop - closest.offsetTop);
+
+      sections.forEach(section => {
+        const distance = Math.abs(scrollTop - section.offsetTop);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closest = section;
+        }
+      });
+
+      bounceScrollTo(closest.offsetTop);
+    }
+
+    function bounceScrollTo(target) {
+      const start = container.scrollTop;
+      const distance = target - start;
+      const duration = 750;
+
+      let startTime = null;
+
+      function easeOutElastic(t) {
+        return Math.sin(-13 * (t + 1) * Math.PI / 2) * Math.pow(2, -10 * t) + 1;
+      }
+
+      function animate(time) {
+        if (!startTime) startTime = time;
+        const elapsed = time - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        const eased = easeOutElastic(progress);
+        container.scrollTop = start + distance * eased;
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
   </script>
 
 </body>
